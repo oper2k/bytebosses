@@ -5,6 +5,7 @@ import 'package:community_testing_ryusdv/app_state.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
 import 'animated_coins_model.dart';
 export 'animated_coins_model.dart';
@@ -35,6 +36,15 @@ class _AnimatedCoinsWidgetState extends State<AnimatedCoinsWidget>
 
     // On component load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
+      _model.soundPlayer ??= AudioPlayer();
+      if (_model.soundPlayer!.playing) {
+        await _model.soundPlayer!.stop();
+      }
+      _model.soundPlayer!.setVolume(1.0);
+      _model.soundPlayer!
+          .setAsset('assets/audios/drop_coin.mp3')
+          .then((_) => _model.soundPlayer!.play());
+
       await Future.delayed(
         Duration(
           milliseconds: 600,

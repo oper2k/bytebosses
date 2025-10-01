@@ -61,7 +61,14 @@ class _ProfileWidgetState extends State<ProfileWidget> {
         body: Container(
           width: double.infinity,
           height: double.infinity,
-          decoration: BoxDecoration(),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(0.0),
+              bottomRight: Radius.circular(0.0),
+              topLeft: Radius.circular(0.0),
+              topRight: Radius.circular(0.0),
+            ),
+          ),
           child: Container(
             width: double.infinity,
             height: double.infinity,
@@ -163,7 +170,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                     },
                                     child: Container(
                                       width: 194.0,
-                                      height: 194.0,
+                                      height: 200.0,
                                       decoration: BoxDecoration(
                                         color: FlutterFlowTheme.of(context)
                                             .secondaryBackground,
@@ -201,22 +208,58 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                                     .contains(achieveItem.id)
                                                 ? 1.0
                                                 : 0.3,
-                                            child: Text(
-                                              achieveItem.name,
-                                              style:
-                                                  FlutterFlowTheme.of(context)
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(
+                                                      0.0, 12.0, 0.0, 0.0),
+                                              child: Text(
+                                                achieveItem.name,
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'Gazprombank',
+                                                          fontSize: 16.0,
+                                                          letterSpacing: 0.0,
+                                                        ),
+                                              ),
+                                            ),
+                                          ),
+                                          if (!FFAppState()
+                                              .userData
+                                              .completedAchievements
+                                              .contains(achieveItem.id))
+                                            Opacity(
+                                              opacity: FFAppState()
+                                                      .userData
+                                                      .completedAchievements
+                                                      .contains(achieveItem.id)
+                                                  ? 1.0
+                                                  : 0.3,
+                                              child: Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(
+                                                        0.0, 2.0, 0.0, 0.0),
+                                                child: Text(
+                                                  'Достижение заблокировано',
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
                                                       .bodyMedium
                                                       .override(
                                                         fontFamily:
                                                             'Gazprombank',
-                                                        fontSize: 16.0,
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .secondaryText,
+                                                        fontSize: 12.0,
                                                         letterSpacing: 0.0,
                                                       ),
+                                                ),
+                                              ),
                                             ),
-                                          ),
-                                        ]
-                                            .divide(SizedBox(height: 12.0))
-                                            .addToStart(SizedBox(height: 12.0)),
+                                        ].addToStart(SizedBox(height: 12.0)),
                                       ),
                                     ),
                                   );
@@ -337,6 +380,17 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                               onChanged: (newValue) async {
                                 safeSetState(
                                     () => _model.switchValue = newValue);
+                                if (newValue) {
+                                  FFAppState().updateUserDataStruct(
+                                    (e) => e..isEnablePush = true,
+                                  );
+                                  safeSetState(() {});
+                                } else {
+                                  FFAppState().updateUserDataStruct(
+                                    (e) => e..isEnablePush = false,
+                                  );
+                                  safeSetState(() {});
+                                }
                               },
                               activeColor: FlutterFlowTheme.of(context).primary,
                               activeTrackColor:

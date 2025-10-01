@@ -46,6 +46,9 @@ class _TabBarWidgetState extends State<TabBarWidget> {
     return Container(
       width: double.infinity,
       height: 90.0,
+      constraints: BoxConstraints(
+        maxWidth: 430.0,
+      ),
       decoration: BoxDecoration(
         color: FlutterFlowTheme.of(context).primaryBackground,
       ),
@@ -59,7 +62,16 @@ class _TabBarWidgetState extends State<TabBarWidget> {
             hoverColor: Colors.transparent,
             highlightColor: Colors.transparent,
             onTap: () async {
-              context.pushNamed(GameWidget.routeName);
+              context.goNamed(
+                GameWidget.routeName,
+                extra: <String, dynamic>{
+                  kTransitionInfoKey: TransitionInfo(
+                    hasTransition: true,
+                    transitionType: PageTransitionType.fade,
+                    duration: Duration(milliseconds: 0),
+                  ),
+                },
+              );
             },
             child: Container(
               width: 60.0,
@@ -112,7 +124,16 @@ class _TabBarWidgetState extends State<TabBarWidget> {
             hoverColor: Colors.transparent,
             highlightColor: Colors.transparent,
             onTap: () async {
-              context.pushNamed(LavkaWidget.routeName);
+              context.goNamed(
+                LavkaWidget.routeName,
+                extra: <String, dynamic>{
+                  kTransitionInfoKey: TransitionInfo(
+                    hasTransition: true,
+                    transitionType: PageTransitionType.fade,
+                    duration: Duration(milliseconds: 0),
+                  ),
+                },
+              );
             },
             child: Container(
               width: 60.0,
@@ -165,7 +186,16 @@ class _TabBarWidgetState extends State<TabBarWidget> {
             hoverColor: Colors.transparent,
             highlightColor: Colors.transparent,
             onTap: () async {
-              context.pushNamed(ProfileWidget.routeName);
+              context.goNamed(
+                ProfileWidget.routeName,
+                extra: <String, dynamic>{
+                  kTransitionInfoKey: TransitionInfo(
+                    hasTransition: true,
+                    transitionType: PageTransitionType.fade,
+                    duration: Duration(milliseconds: 0),
+                  ),
+                },
+              );
             },
             child: Container(
               width: 60.0,

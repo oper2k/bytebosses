@@ -7,11 +7,11 @@ import '/flutter_flow/flutter_flow_util.dart';
 
 class CardStruct extends BaseStruct {
   CardStruct({
-    String? id,
     int? order,
     String? questionText,
+    String? image,
     String? variantAText,
-    String? variantAImage,
+    String? variantAEmoji,
     double? variantAIncreaseFinLevel,
     int? variantAIncreaseCoins,
     String? variantAResult,
@@ -19,18 +19,18 @@ class CardStruct extends BaseStruct {
     String? variantAResultBtnText,
     String? variantAResultBtnLink,
     String? variantBText,
-    String? variantBImage,
+    String? variantBEmoji,
     double? variantBIncreaseFinLevel,
     int? variantBIncreaseCoins,
     String? variantBResult,
     String? variantBResultImage,
     String? variantBResultBtnText,
     String? variantBResultBtnLink,
-  })  : _id = id,
-        _order = order,
+  })  : _order = order,
         _questionText = questionText,
+        _image = image,
         _variantAText = variantAText,
-        _variantAImage = variantAImage,
+        _variantAEmoji = variantAEmoji,
         _variantAIncreaseFinLevel = variantAIncreaseFinLevel,
         _variantAIncreaseCoins = variantAIncreaseCoins,
         _variantAResult = variantAResult,
@@ -38,20 +38,13 @@ class CardStruct extends BaseStruct {
         _variantAResultBtnText = variantAResultBtnText,
         _variantAResultBtnLink = variantAResultBtnLink,
         _variantBText = variantBText,
-        _variantBImage = variantBImage,
+        _variantBEmoji = variantBEmoji,
         _variantBIncreaseFinLevel = variantBIncreaseFinLevel,
         _variantBIncreaseCoins = variantBIncreaseCoins,
         _variantBResult = variantBResult,
         _variantBResultImage = variantBResultImage,
         _variantBResultBtnText = variantBResultBtnText,
         _variantBResultBtnLink = variantBResultBtnLink;
-
-  // "id" field.
-  String? _id;
-  String get id => _id ?? '';
-  set id(String? val) => _id = val;
-
-  bool hasId() => _id != null;
 
   // "order" field.
   int? _order;
@@ -69,6 +62,13 @@ class CardStruct extends BaseStruct {
 
   bool hasQuestionText() => _questionText != null;
 
+  // "image" field.
+  String? _image;
+  String get image => _image ?? '';
+  set image(String? val) => _image = val;
+
+  bool hasImage() => _image != null;
+
   // "variant_A_text" field.
   String? _variantAText;
   String get variantAText => _variantAText ?? '';
@@ -76,12 +76,12 @@ class CardStruct extends BaseStruct {
 
   bool hasVariantAText() => _variantAText != null;
 
-  // "variant_A_image" field.
-  String? _variantAImage;
-  String get variantAImage => _variantAImage ?? '';
-  set variantAImage(String? val) => _variantAImage = val;
+  // "variant_A_emoji" field.
+  String? _variantAEmoji;
+  String get variantAEmoji => _variantAEmoji ?? '';
+  set variantAEmoji(String? val) => _variantAEmoji = val;
 
-  bool hasVariantAImage() => _variantAImage != null;
+  bool hasVariantAEmoji() => _variantAEmoji != null;
 
   // "variant_A_increase_finLevel" field.
   double? _variantAIncreaseFinLevel;
@@ -138,12 +138,12 @@ class CardStruct extends BaseStruct {
 
   bool hasVariantBText() => _variantBText != null;
 
-  // "variant_B_image" field.
-  String? _variantBImage;
-  String get variantBImage => _variantBImage ?? '';
-  set variantBImage(String? val) => _variantBImage = val;
+  // "variant_B_emoji" field.
+  String? _variantBEmoji;
+  String get variantBEmoji => _variantBEmoji ?? '';
+  set variantBEmoji(String? val) => _variantBEmoji = val;
 
-  bool hasVariantBImage() => _variantBImage != null;
+  bool hasVariantBEmoji() => _variantBEmoji != null;
 
   // "variant_B_increase_finLevel" field.
   double? _variantBIncreaseFinLevel;
@@ -194,11 +194,11 @@ class CardStruct extends BaseStruct {
   bool hasVariantBResultBtnLink() => _variantBResultBtnLink != null;
 
   static CardStruct fromMap(Map<String, dynamic> data) => CardStruct(
-        id: data['id'] as String?,
         order: castToType<int>(data['order']),
         questionText: data['question_text'] as String?,
+        image: data['image'] as String?,
         variantAText: data['variant_A_text'] as String?,
-        variantAImage: data['variant_A_image'] as String?,
+        variantAEmoji: data['variant_A_emoji'] as String?,
         variantAIncreaseFinLevel:
             castToType<double>(data['variant_A_increase_finLevel']),
         variantAIncreaseCoins:
@@ -208,7 +208,7 @@ class CardStruct extends BaseStruct {
         variantAResultBtnText: data['variant_A_result_btnText'] as String?,
         variantAResultBtnLink: data['variant_A_result_btnLink'] as String?,
         variantBText: data['variant_B_text'] as String?,
-        variantBImage: data['variant_B_image'] as String?,
+        variantBEmoji: data['variant_B_emoji'] as String?,
         variantBIncreaseFinLevel:
             castToType<double>(data['variant_B_increase_finLevel']),
         variantBIncreaseCoins:
@@ -223,11 +223,11 @@ class CardStruct extends BaseStruct {
       data is Map ? CardStruct.fromMap(data.cast<String, dynamic>()) : null;
 
   Map<String, dynamic> toMap() => {
-        'id': _id,
         'order': _order,
         'question_text': _questionText,
+        'image': _image,
         'variant_A_text': _variantAText,
-        'variant_A_image': _variantAImage,
+        'variant_A_emoji': _variantAEmoji,
         'variant_A_increase_finLevel': _variantAIncreaseFinLevel,
         'variant_A_increase_coins': _variantAIncreaseCoins,
         'variant_A_result': _variantAResult,
@@ -235,7 +235,7 @@ class CardStruct extends BaseStruct {
         'variant_A_result_btnText': _variantAResultBtnText,
         'variant_A_result_btnLink': _variantAResultBtnLink,
         'variant_B_text': _variantBText,
-        'variant_B_image': _variantBImage,
+        'variant_B_emoji': _variantBEmoji,
         'variant_B_increase_finLevel': _variantBIncreaseFinLevel,
         'variant_B_increase_coins': _variantBIncreaseCoins,
         'variant_B_result': _variantBResult,
@@ -246,10 +246,6 @@ class CardStruct extends BaseStruct {
 
   @override
   Map<String, dynamic> toSerializableMap() => {
-        'id': serializeParam(
-          _id,
-          ParamType.String,
-        ),
         'order': serializeParam(
           _order,
           ParamType.int,
@@ -258,12 +254,16 @@ class CardStruct extends BaseStruct {
           _questionText,
           ParamType.String,
         ),
+        'image': serializeParam(
+          _image,
+          ParamType.String,
+        ),
         'variant_A_text': serializeParam(
           _variantAText,
           ParamType.String,
         ),
-        'variant_A_image': serializeParam(
-          _variantAImage,
+        'variant_A_emoji': serializeParam(
+          _variantAEmoji,
           ParamType.String,
         ),
         'variant_A_increase_finLevel': serializeParam(
@@ -294,8 +294,8 @@ class CardStruct extends BaseStruct {
           _variantBText,
           ParamType.String,
         ),
-        'variant_B_image': serializeParam(
-          _variantBImage,
+        'variant_B_emoji': serializeParam(
+          _variantBEmoji,
           ParamType.String,
         ),
         'variant_B_increase_finLevel': serializeParam(
@@ -326,11 +326,6 @@ class CardStruct extends BaseStruct {
 
   static CardStruct fromSerializableMap(Map<String, dynamic> data) =>
       CardStruct(
-        id: deserializeParam(
-          data['id'],
-          ParamType.String,
-          false,
-        ),
         order: deserializeParam(
           data['order'],
           ParamType.int,
@@ -341,13 +336,18 @@ class CardStruct extends BaseStruct {
           ParamType.String,
           false,
         ),
+        image: deserializeParam(
+          data['image'],
+          ParamType.String,
+          false,
+        ),
         variantAText: deserializeParam(
           data['variant_A_text'],
           ParamType.String,
           false,
         ),
-        variantAImage: deserializeParam(
-          data['variant_A_image'],
+        variantAEmoji: deserializeParam(
+          data['variant_A_emoji'],
           ParamType.String,
           false,
         ),
@@ -386,8 +386,8 @@ class CardStruct extends BaseStruct {
           ParamType.String,
           false,
         ),
-        variantBImage: deserializeParam(
-          data['variant_B_image'],
+        variantBEmoji: deserializeParam(
+          data['variant_B_emoji'],
           ParamType.String,
           false,
         ),
@@ -429,11 +429,11 @@ class CardStruct extends BaseStruct {
   @override
   bool operator ==(Object other) {
     return other is CardStruct &&
-        id == other.id &&
         order == other.order &&
         questionText == other.questionText &&
+        image == other.image &&
         variantAText == other.variantAText &&
-        variantAImage == other.variantAImage &&
+        variantAEmoji == other.variantAEmoji &&
         variantAIncreaseFinLevel == other.variantAIncreaseFinLevel &&
         variantAIncreaseCoins == other.variantAIncreaseCoins &&
         variantAResult == other.variantAResult &&
@@ -441,7 +441,7 @@ class CardStruct extends BaseStruct {
         variantAResultBtnText == other.variantAResultBtnText &&
         variantAResultBtnLink == other.variantAResultBtnLink &&
         variantBText == other.variantBText &&
-        variantBImage == other.variantBImage &&
+        variantBEmoji == other.variantBEmoji &&
         variantBIncreaseFinLevel == other.variantBIncreaseFinLevel &&
         variantBIncreaseCoins == other.variantBIncreaseCoins &&
         variantBResult == other.variantBResult &&
@@ -452,11 +452,11 @@ class CardStruct extends BaseStruct {
 
   @override
   int get hashCode => const ListEquality().hash([
-        id,
         order,
         questionText,
+        image,
         variantAText,
-        variantAImage,
+        variantAEmoji,
         variantAIncreaseFinLevel,
         variantAIncreaseCoins,
         variantAResult,
@@ -464,7 +464,7 @@ class CardStruct extends BaseStruct {
         variantAResultBtnText,
         variantAResultBtnLink,
         variantBText,
-        variantBImage,
+        variantBEmoji,
         variantBIncreaseFinLevel,
         variantBIncreaseCoins,
         variantBResult,
@@ -475,11 +475,11 @@ class CardStruct extends BaseStruct {
 }
 
 CardStruct createCardStruct({
-  String? id,
   int? order,
   String? questionText,
+  String? image,
   String? variantAText,
-  String? variantAImage,
+  String? variantAEmoji,
   double? variantAIncreaseFinLevel,
   int? variantAIncreaseCoins,
   String? variantAResult,
@@ -487,7 +487,7 @@ CardStruct createCardStruct({
   String? variantAResultBtnText,
   String? variantAResultBtnLink,
   String? variantBText,
-  String? variantBImage,
+  String? variantBEmoji,
   double? variantBIncreaseFinLevel,
   int? variantBIncreaseCoins,
   String? variantBResult,
@@ -496,11 +496,11 @@ CardStruct createCardStruct({
   String? variantBResultBtnLink,
 }) =>
     CardStruct(
-      id: id,
       order: order,
       questionText: questionText,
+      image: image,
       variantAText: variantAText,
-      variantAImage: variantAImage,
+      variantAEmoji: variantAEmoji,
       variantAIncreaseFinLevel: variantAIncreaseFinLevel,
       variantAIncreaseCoins: variantAIncreaseCoins,
       variantAResult: variantAResult,
@@ -508,7 +508,7 @@ CardStruct createCardStruct({
       variantAResultBtnText: variantAResultBtnText,
       variantAResultBtnLink: variantAResultBtnLink,
       variantBText: variantBText,
-      variantBImage: variantBImage,
+      variantBEmoji: variantBEmoji,
       variantBIncreaseFinLevel: variantBIncreaseFinLevel,
       variantBIncreaseCoins: variantBIncreaseCoins,
       variantBResult: variantBResult,

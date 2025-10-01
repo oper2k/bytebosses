@@ -4,3 +4,4 @@ export '/pages/result/result_widget.dart' show ResultWidget;
 export '/pages/lavka/lavka_widget.dart' show LavkaWidget;
 export '/pages/profile/profile_widget.dart' show ProfileWidget;
 export '/pages/game/game_widget.dart' show GameWidget;
+export '/debug/debug_widget.dart' show DebugWidget;

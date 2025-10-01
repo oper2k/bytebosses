@@ -19,7 +19,7 @@ class QuestionModel extends FlutterFlowModel<QuestionWidget> {
 
   bool isShowQuestion = true;
 
-  String selectedVariant = 'A';
+  String? selectedVariant = '';
 
   ///  State fields for stateful widgets in this page.
 

@@ -4,6 +4,8 @@ import '/components/head_widget.dart';
 import '/components/tab_bar_widget.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/pop/category_p_o_p/category_p_o_p_widget.dart';
+import '/pop/play_again_p_o_p/play_again_p_o_p_widget.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'package:community_testing_ryusdv/app_state.dart'
     as community_testing_ryusdv_app_state;
@@ -235,15 +237,82 @@ class _GameWidgetState extends State<GameWidget> {
                                               highlightColor:
                                                   Colors.transparent,
                                               onTap: () async {
-                                                context.goNamed(
-                                                  QuestionWidget.routeName,
-                                                  queryParameters: {
-                                                    'category': serializeParam(
-                                                      categoryTodayItem,
-                                                      ParamType.DataStruct,
-                                                    ),
-                                                  }.withoutNulls,
-                                                );
+                                                if (!FFAppState()
+                                                    .userData
+                                                    .completedCategoriesIds
+                                                    .contains(
+                                                        categoryTodayItem.id)) {
+                                                  context.goNamed(
+                                                    QuestionWidget.routeName,
+                                                    queryParameters: {
+                                                      'category':
+                                                          serializeParam(
+                                                        categoryTodayItem,
+                                                        ParamType.DataStruct,
+                                                      ),
+                                                      'lastPlayedCardId':
+                                                          serializeParam(
+                                                        functions.returnLastPlayedCard(
+                                                            categoryTodayItem
+                                                                .cardsCount,
+                                                            categoryTodayItem
+                                                                .id,
+                                                            FFAppState()
+                                                                .userData
+                                                                .completedCardsIds
+                                                                .toList()),
+                                                        ParamType.String,
+                                                      ),
+                                                    }.withoutNulls,
+                                                    extra: <String, dynamic>{
+                                                      kTransitionInfoKey:
+                                                          TransitionInfo(
+                                                        hasTransition: true,
+                                                        transitionType:
+                                                            PageTransitionType
+                                                                .fade,
+                                                        duration: Duration(
+                                                            milliseconds: 0),
+                                                      ),
+                                                    },
+                                                  );
+                                                } else {
+                                                  showModalBottomSheet(
+                                                    isScrollControlled: true,
+                                                    backgroundColor:
+                                                        Colors.transparent,
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return GestureDetector(
+                                                        onTap: () {
+                                                          FocusScope.of(context)
+                                                              .unfocus();
+                                                          FocusManager.instance
+                                                              .primaryFocus
+                                                              ?.unfocus();
+                                                        },
+                                                        child: Padding(
+                                                          padding: MediaQuery
+                                                              .viewInsetsOf(
+                                                                  context),
+                                                          child: Container(
+                                                            height: MediaQuery
+                                                                        .sizeOf(
+                                                                            context)
+                                                                    .height *
+                                                                1.0,
+                                                            child:
+                                                                PlayAgainPOPWidget(
+                                                              category:
+                                                                  categoryTodayItem,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                  ).then((value) =>
+                                                      safeSetState(() {}));
+                                                }
                                               },
                                               child: Container(
                                                 width: double.infinity,
@@ -317,13 +386,26 @@ class _GameWidgetState extends State<GameWidget> {
                                                                     ),
                                                               ),
                                                               Text(
-                                                                FFAppState()
-                                                                        .userData
-                                                                        .completedCategoriesIds
-                                                                        .contains(
-                                                                            categoryTodayItem.id)
-                                                                    ? 'Категория пройдена 🎉'
-                                                                    : '${categoryTodayItem.cardsCount.toString()} вопросов',
+                                                                () {
+                                                                  if (FFAppState()
+                                                                      .userData
+                                                                      .completedCategoriesIds
+                                                                      .contains(
+                                                                          categoryTodayItem
+                                                                              .id)) {
+                                                                    return 'Категория пройдена 🎉';
+                                                                  } else if (functions.returnLastPlayedCard(categoryTodayItem.cardsCount, categoryTodayItem.id, FFAppState().userData.completedCardsIds.toList()) !=
+                                                                          null &&
+                                                                      functions.returnLastPlayedCard(
+                                                                              categoryTodayItem.cardsCount,
+                                                                              categoryTodayItem.id,
+                                                                              FFAppState().userData.completedCardsIds.toList()) !=
+                                                                          '') {
+                                                                    return 'Продолжить';
+                                                                  } else {
+                                                                    return '${categoryTodayItem.cardsCount.toString()} вопросов';
+                                                                  }
+                                                                }(),
                                                                 style: FlutterFlowTheme.of(
                                                                         context)
                                                                     .bodyMedium

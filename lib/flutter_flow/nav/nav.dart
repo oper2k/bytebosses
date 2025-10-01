@@ -60,6 +60,14 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) {
             isList: false,
             structBuilder: CategoryStruct.fromSerializableMap,
           ),
+          lastPlayedCardId: params.getParam(
+            'lastPlayedCardId',
+            ParamType.String,
+          ),
+          isPlayAgain: params.getParam(
+            'isPlayAgain',
+            ParamType.bool,
+          ),
         ),
       ),
       FFRoute(
@@ -90,12 +98,18 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) {
         builder: (context, params) => GameWidget(),
       ),
       FFRoute(
+        name: DebugWidget.routeName,
+        path: DebugWidget.routePath,
+        builder: (context, params) => DebugWidget(),
+      ),
+      FFRoute(
         name: $community_testing_ryusdv.NotificationsWidget.routeName,
         path: $community_testing_ryusdv.NotificationsWidget.routePath,
         builder: (context, params) =>
             $community_testing_ryusdv.NotificationsWidget(),
       )
     ].map((r) => r.toRoute(appStateNotifier)).toList(),
+    observers: [routeObserver],
   );
 }
 

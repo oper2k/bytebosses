@@ -1,4 +1,7 @@
 import '/components/animated_coins_widget.dart';
+import '/components/progress_bar_animation_widget.dart';
+import '/components/progress_bar_widget.dart';
+import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/pop/coins_p_o_p/coins_p_o_p_widget.dart';
 import '/pop/finance_p_o_p/finance_p_o_p_widget.dart';
@@ -6,6 +9,7 @@ import 'package:community_testing_ryusdv/app_state.dart'
     as community_testing_ryusdv_app_state;
 import 'package:ff_theme/flutter_flow/flutter_flow_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import 'head_model.dart';
 export 'head_model.dart';
@@ -17,8 +21,10 @@ class HeadWidget extends StatefulWidget {
   State<HeadWidget> createState() => _HeadWidgetState();
 }
 
-class _HeadWidgetState extends State<HeadWidget> {
+class _HeadWidgetState extends State<HeadWidget> with TickerProviderStateMixin {
   late HeadModel _model;
+
+  final animationsMap = <String, AnimationInfo>{};
 
   @override
   void setState(VoidCallback callback) {
@@ -30,6 +36,28 @@ class _HeadWidgetState extends State<HeadWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => HeadModel());
+
+    animationsMap.addAll({
+      'progressBarOnActionTriggerAnimation': AnimationInfo(
+        trigger: AnimationTrigger.onActionTrigger,
+        applyInitialState: true,
+        effectsBuilder: () => [
+          ShimmerEffect(
+            curve: Curves.easeInOut,
+            delay: 200.0.ms,
+            duration: 600.0.ms,
+            color: Color(0x80FFFFFF),
+            angle: 0.524,
+          ),
+        ],
+      ),
+    });
+    setupAnimations(
+      animationsMap.values.where((anim) =>
+          anim.trigger == AnimationTrigger.onActionTrigger ||
+          !anim.applyInitialState),
+      this,
+    );
 
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
@@ -75,46 +103,30 @@ class _HeadWidgetState extends State<HeadWidget> {
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: [
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Expanded(
-                      child: Stack(
-                        children: [
-                          Container(
-                            width: double.infinity,
-                            height: 26.0,
-                            decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context)
-                                  .secondaryBackground,
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 60.0, 0.0),
-                            child: Container(
-                              width: double.infinity,
-                              height: 26.0,
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    FlutterFlowTheme.of(context).primary,
-                                    FlutterFlowTheme.of(context).tertiary
-                                  ],
-                                  stops: [0.0, 1.0],
-                                  begin: AlignmentDirectional(1.0, 0.0),
-                                  end: AlignmentDirectional(-1.0, 0),
-                                ),
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                wrapWithModel(
+                  model: _model.progressBarModel,
+                  updateCallback: () => safeSetState(() {}),
+                  child: ProgressBarWidget(),
+                ).animateOnActionTrigger(
+                  animationsMap['progressBarOnActionTriggerAnimation']!,
                 ),
+                if (FFAppState().isShowProgressBarAnimation)
+                  wrapWithModel(
+                    model: _model.progressBarAnimationModel,
+                    updateCallback: () => safeSetState(() {}),
+                    child: ProgressBarAnimationWidget(
+                      callback: () async {
+                        if (animationsMap[
+                                'progressBarOnActionTriggerAnimation'] !=
+                            null) {
+                          await animationsMap[
+                                  'progressBarOnActionTriggerAnimation']!
+                              .controller
+                              .forward(from: 0.0);
+                        }
+                      },
+                    ),
+                  ),
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 0.0, 0.0),
                   child: Row(

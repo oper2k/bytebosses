@@ -1,9 +1,10 @@
 import '/flutter_flow/flutter_flow_util.dart';
-import 'animated_coins_widget.dart' show AnimatedCoinsWidget;
+import 'progress_bar_animation_widget.dart' show ProgressBarAnimationWidget;
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 
-class AnimatedCoinsModel extends FlutterFlowModel<AnimatedCoinsWidget> {
+class ProgressBarAnimationModel
+    extends FlutterFlowModel<ProgressBarAnimationWidget> {
   ///  State fields for stateful widgets in this component.
 
   AudioPlayer? soundPlayer;

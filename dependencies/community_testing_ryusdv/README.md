@@ -1,4 +1,4 @@
-# Hakaton 2025
+# in-app-notifications
 
 A new Flutter project.
 

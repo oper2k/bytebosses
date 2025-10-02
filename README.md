@@ -7,7 +7,7 @@ https://bytebosses.ru
 
 Ссылка на код приложения - https://github.com/oper2k/bytebosses
 Ссылка на Figma: https://www.figma.com/design/lASDizMrIqNkuDzeSNJWVp/Хакатон-игра?node-id=0-1&p=f&t=8PYnsN9dswQYpgZ7-0
-Ссылка на видео презентацию: 
+Ссылка на видео презентацию: https://disk.yandex.ru/i/n_lyikQnC2pvBw
 
 
 Механика и сюжетная линия игры

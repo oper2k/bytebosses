@@ -1,10 +1,9 @@
-import '/backend/schema/structs/index.dart';
 import '/components/back_one_widget.dart';
 import '/components/close_widget.dart';
 import '/components/tab_bar_widget.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/pop/achievement_p_o_p/achievement_p_o_p_widget.dart';
-import '/index.dart';
+import '/pop/reset_progress_p_o_p/reset_progress_p_o_p_widget.dart';
 import 'package:community_testing_ryusdv/app_state.dart'
     as community_testing_ryusdv_app_state;
 import 'package:cached_network_image/cached_network_image.dart';
@@ -84,152 +83,130 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                 ),
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0.0, 33.0, 0.0, 36.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Align(
-                        alignment: AlignmentDirectional(-1.0, 0.0),
-                        child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              16.0, 54.0, 0.0, 0.0),
-                          child: Text(
-                            'Профиль',
-                            textAlign: TextAlign.center,
-                            style: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .override(
-                                  fontFamily: 'Halvar Web',
-                                  fontSize: 28.0,
-                                  letterSpacing: 0.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Align(
+                          alignment: AlignmentDirectional(-1.0, 0.0),
+                          child: Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                16.0, 54.0, 0.0, 0.0),
+                            child: Text(
+                              'Профиль',
+                              textAlign: TextAlign.center,
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
+                                    fontFamily: 'Halvar Web',
+                                    fontSize: 28.0,
+                                    letterSpacing: 0.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                            ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 24.0, 0.0, 0.0),
-                        child: Builder(
-                          builder: (context) {
-                            final achieve = FFAppState().achievements.toList();
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 24.0, 0.0, 0.0),
+                          child: Builder(
+                            builder: (context) {
+                              final achieve = FFAppState()
+                                  .achievements
+                                  .sortedList(
+                                      keyOf: (e) => e.order, desc: false)
+                                  .toList();
 
-                            return SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: List.generate(achieve.length,
-                                        (achieveIndex) {
-                                  final achieveItem = achieve[achieveIndex];
-                                  return InkWell(
-                                    splashColor: Colors.transparent,
-                                    focusColor: Colors.transparent,
-                                    hoverColor: Colors.transparent,
-                                    highlightColor: Colors.transparent,
-                                    onTap: () async {
-                                      if (FFAppState()
-                                          .userData
-                                          .completedAchievements
-                                          .contains(achieveItem.id)) {
-                                        showModalBottomSheet(
-                                          isScrollControlled: true,
-                                          backgroundColor: Colors.transparent,
-                                          context: context,
-                                          builder: (context) {
-                                            return GestureDetector(
-                                              onTap: () {
-                                                FocusScope.of(context)
-                                                    .unfocus();
-                                                FocusManager
-                                                    .instance.primaryFocus
-                                                    ?.unfocus();
-                                              },
-                                              child: Padding(
-                                                padding:
-                                                    MediaQuery.viewInsetsOf(
-                                                        context),
-                                                child: Container(
-                                                  height:
-                                                      MediaQuery.sizeOf(context)
-                                                              .height *
-                                                          1.0,
-                                                  child: AchievementPOPWidget(
-                                                    achievement: achieveItem,
+                              return SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: List.generate(achieve.length,
+                                          (achieveIndex) {
+                                    final achieveItem = achieve[achieveIndex];
+                                    return InkWell(
+                                      splashColor: Colors.transparent,
+                                      focusColor: Colors.transparent,
+                                      hoverColor: Colors.transparent,
+                                      highlightColor: Colors.transparent,
+                                      onTap: () async {
+                                        if (FFAppState()
+                                            .userData
+                                            .completedAchievements
+                                            .contains(achieveItem.id)) {
+                                          showModalBottomSheet(
+                                            isScrollControlled: true,
+                                            backgroundColor: Colors.transparent,
+                                            context: context,
+                                            builder: (context) {
+                                              return GestureDetector(
+                                                onTap: () {
+                                                  FocusScope.of(context)
+                                                      .unfocus();
+                                                  FocusManager
+                                                      .instance.primaryFocus
+                                                      ?.unfocus();
+                                                },
+                                                child: Padding(
+                                                  padding:
+                                                      MediaQuery.viewInsetsOf(
+                                                          context),
+                                                  child: Container(
+                                                    height: MediaQuery.sizeOf(
+                                                                context)
+                                                            .height *
+                                                        1.0,
+                                                    child: AchievementPOPWidget(
+                                                      achievement: achieveItem,
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                            );
-                                          },
-                                        ).then((value) => safeSetState(() {}));
+                                              );
+                                            },
+                                          ).then(
+                                              (value) => safeSetState(() {}));
 
-                                        return;
-                                      } else {
-                                        return;
-                                      }
-                                    },
-                                    child: Container(
-                                      width: 194.0,
-                                      height: 200.0,
-                                      decoration: BoxDecoration(
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryBackground,
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
-                                      ),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Opacity(
-                                            opacity: FFAppState()
-                                                    .userData
-                                                    .completedAchievements
-                                                    .contains(achieveItem.id)
-                                                ? 1.0
-                                                : 0.3,
-                                            child: CachedNetworkImage(
-                                              fadeInDuration:
-                                                  Duration(milliseconds: 100),
-                                              fadeOutDuration:
-                                                  Duration(milliseconds: 100),
-                                              imageUrl: valueOrDefault<String>(
-                                                achieveItem.image,
-                                                'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/hackathon-p74jkp/assets/oz8zo1gbf99n/heart.webp',
-                                              ),
-                                              width: 127.0,
-                                              height: 127.0,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                          Opacity(
-                                            opacity: FFAppState()
-                                                    .userData
-                                                    .completedAchievements
-                                                    .contains(achieveItem.id)
-                                                ? 1.0
-                                                : 0.3,
-                                            child: Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(
-                                                      0.0, 12.0, 0.0, 0.0),
-                                              child: Text(
-                                                achieveItem.name,
-                                                style:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          fontFamily:
-                                                              'Gazprombank',
-                                                          fontSize: 16.0,
-                                                          letterSpacing: 0.0,
-                                                        ),
+                                          return;
+                                        } else {
+                                          return;
+                                        }
+                                      },
+                                      child: Container(
+                                        width: 160.0,
+                                        height: 180.0,
+                                        decoration: BoxDecoration(
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryBackground,
+                                          borderRadius:
+                                              BorderRadius.circular(20.0),
+                                        ),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            Opacity(
+                                              opacity: FFAppState()
+                                                      .userData
+                                                      .completedAchievements
+                                                      .contains(achieveItem.id)
+                                                  ? 1.0
+                                                  : 0.3,
+                                              child: CachedNetworkImage(
+                                                fadeInDuration:
+                                                    Duration(milliseconds: 100),
+                                                fadeOutDuration:
+                                                    Duration(milliseconds: 100),
+                                                imageUrl:
+                                                    valueOrDefault<String>(
+                                                  achieveItem.image,
+                                                  'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/hackathon-p74jkp/assets/oz8zo1gbf99n/heart.webp',
+                                                ),
+                                                width: 110.0,
+                                                height: 110.0,
+                                                fit: BoxFit.cover,
                                               ),
                                             ),
-                                          ),
-                                          if (!FFAppState()
-                                              .userData
-                                              .completedAchievements
-                                              .contains(achieveItem.id))
                                             Opacity(
                                               opacity: FFAppState()
                                                       .userData
@@ -240,201 +217,263 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                               child: Padding(
                                                 padding: EdgeInsetsDirectional
                                                     .fromSTEB(
-                                                        0.0, 2.0, 0.0, 0.0),
+                                                        16.0, 6.0, 16.0, 0.0),
                                                 child: Text(
-                                                  'Достижение заблокировано',
+                                                  achieveItem.name,
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .bodyMedium
                                                       .override(
                                                         fontFamily:
                                                             'Gazprombank',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .secondaryText,
-                                                        fontSize: 12.0,
+                                                        fontSize: 16.0,
                                                         letterSpacing: 0.0,
                                                       ),
                                                 ),
                                               ),
                                             ),
-                                        ].addToStart(SizedBox(height: 12.0)),
+                                            if (!FFAppState()
+                                                .userData
+                                                .completedAchievements
+                                                .contains(achieveItem.id))
+                                              Opacity(
+                                                opacity: FFAppState()
+                                                        .userData
+                                                        .completedAchievements
+                                                        .contains(
+                                                            achieveItem.id)
+                                                    ? 1.0
+                                                    : 0.3,
+                                                child: Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(
+                                                          12.0, 2.0, 12.0, 0.0),
+                                                  child: Text(
+                                                    'Достижение заблокировано',
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'Gazprombank',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .secondaryText,
+                                                          fontSize: 10.0,
+                                                          letterSpacing: 0.0,
+                                                        ),
+                                                  ),
+                                                ),
+                                              ),
+                                          ].addToStart(SizedBox(height: 12.0)),
+                                        ),
                                       ),
-                                    ),
-                                  );
-                                })
-                                    .divide(SizedBox(width: 8.0))
-                                    .addToStart(SizedBox(width: 14.0))
-                                    .addToEnd(SizedBox(width: 14.0)),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            14.0, 32.0, 14.0, 14.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Пройдено категорий',
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    fontFamily: 'Gazprombank',
-                                    fontSize: 16.0,
-                                    letterSpacing: 0.0,
-                                  ),
-                            ),
-                            Text(
-                              valueOrDefault<String>(
-                                FFAppState()
-                                    .userData
-                                    .completedCategoriesIds
-                                    .length
-                                    .toString(),
-                                '0',
-                              ),
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    fontFamily: 'Gazprombank',
-                                    fontSize: 18.0,
-                                    letterSpacing: 0.0,
-                                  ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Divider(
-                        thickness: 1.0,
-                        indent: 14.0,
-                        endIndent: 14.0,
-                        color: Color(0xFFD3D6E3),
-                      ),
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            14.0, 14.0, 14.0, 14.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Отвечено вопросов',
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    fontFamily: 'Gazprombank',
-                                    fontSize: 16.0,
-                                    letterSpacing: 0.0,
-                                  ),
-                            ),
-                            Text(
-                              valueOrDefault<String>(
-                                FFAppState()
-                                    .userData
-                                    .completedCardsIds
-                                    .length
-                                    .toString(),
-                                '0',
-                              ),
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    fontFamily: 'Gazprombank',
-                                    fontSize: 18.0,
-                                    letterSpacing: 0.0,
-                                  ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Divider(
-                        thickness: 1.0,
-                        indent: 14.0,
-                        endIndent: 14.0,
-                        color: Color(0xFFD3D6E3),
-                      ),
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            14.0, 8.0, 14.0, 14.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Уведомления',
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    fontFamily: 'Gazprombank',
-                                    fontSize: 16.0,
-                                    letterSpacing: 0.0,
-                                  ),
-                            ),
-                            Switch.adaptive(
-                              value: _model.switchValue!,
-                              onChanged: (newValue) async {
-                                safeSetState(
-                                    () => _model.switchValue = newValue);
-                                if (newValue) {
-                                  FFAppState().updateUserDataStruct(
-                                    (e) => e..isEnablePush = true,
-                                  );
-                                  safeSetState(() {});
-                                } else {
-                                  FFAppState().updateUserDataStruct(
-                                    (e) => e..isEnablePush = false,
-                                  );
-                                  safeSetState(() {});
-                                }
-                              },
-                              activeColor: FlutterFlowTheme.of(context).primary,
-                              activeTrackColor:
-                                  FlutterFlowTheme.of(context).primary,
-                              inactiveTrackColor: Color(0xFFD9D9D9),
-                              inactiveThumbColor:
-                                  FlutterFlowTheme.of(context).customColor3,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Align(
-                        alignment: AlignmentDirectional(0.0, 0.0),
-                        child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 16.0, 0.0, 0.0),
-                          child: InkWell(
-                            splashColor: Colors.transparent,
-                            focusColor: Colors.transparent,
-                            hoverColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                            onLongPress: () async {
-                              FFAppState().userData =
-                                  UserStruct.fromSerializableMap(jsonDecode(
-                                      '{\"name\":\"Игрок\",\"fin_level\":\"0\",\"coins\":\"0\",\"completed_quests_ids\":\"[]\",\"completed_categories_ids\":\"[]\",\"completed_questions_ids\":\"[]\",\"daysInGame\":\"0\"}'));
-                              safeSetState(() {});
-
-                              context.goNamed(GameWidget.routeName);
+                                    );
+                                  })
+                                      .divide(SizedBox(width: 8.0))
+                                      .addToStart(SizedBox(width: 14.0))
+                                      .addToEnd(SizedBox(width: 14.0)),
+                                ),
+                              );
                             },
-                            child: Text(
-                              'Сбросить прогресс (долгий тап)',
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    fontFamily: 'Gazprombank',
-                                    color: FlutterFlowTheme.of(context).error,
-                                    letterSpacing: 0.0,
-                                    fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              14.0, 28.0, 14.0, 8.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Пройдено категорий',
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      fontFamily: 'Gazprombank',
+                                      fontSize: 16.0,
+                                      letterSpacing: 0.0,
+                                    ),
+                              ),
+                              Text(
+                                valueOrDefault<String>(
+                                  FFAppState()
+                                      .userData
+                                      .completedCategoriesIds
+                                      .length
+                                      .toString(),
+                                  '0',
+                                ),
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      fontFamily: 'Gazprombank',
+                                      fontSize: 18.0,
+                                      letterSpacing: 0.0,
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Divider(
+                          thickness: 1.0,
+                          indent: 14.0,
+                          endIndent: 14.0,
+                          color: Color(0xFFD3D6E3),
+                        ),
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              14.0, 8.0, 14.0, 8.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Ответов на вопросы',
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      fontFamily: 'Gazprombank',
+                                      fontSize: 16.0,
+                                      letterSpacing: 0.0,
+                                    ),
+                              ),
+                              Text(
+                                valueOrDefault<String>(
+                                  FFAppState()
+                                      .userData
+                                      .completedCardsIds
+                                      .length
+                                      .toString(),
+                                  '0',
+                                ),
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      fontFamily: 'Gazprombank',
+                                      fontSize: 18.0,
+                                      letterSpacing: 0.0,
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Divider(
+                          thickness: 1.0,
+                          indent: 14.0,
+                          endIndent: 14.0,
+                          color: Color(0xFFD3D6E3),
+                        ),
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              14.0, 0.0, 14.0, 0.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Уведомления',
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      fontFamily: 'Gazprombank',
+                                      fontSize: 16.0,
+                                      letterSpacing: 0.0,
+                                    ),
+                              ),
+                              Switch.adaptive(
+                                value: _model.switchValue!,
+                                onChanged: (newValue) async {
+                                  safeSetState(
+                                      () => _model.switchValue = newValue);
+                                  if (newValue) {
+                                    FFAppState().updateUserDataStruct(
+                                      (e) => e..isEnablePush = true,
+                                    );
+                                    safeSetState(() {});
+                                  } else {
+                                    FFAppState().updateUserDataStruct(
+                                      (e) => e..isEnablePush = false,
+                                    );
+                                    safeSetState(() {});
+                                  }
+                                },
+                                activeColor:
+                                    FlutterFlowTheme.of(context).primary,
+                                activeTrackColor:
+                                    FlutterFlowTheme.of(context).primary,
+                                inactiveTrackColor: Color(0xFFD9D9D9),
+                                inactiveThumbColor:
+                                    FlutterFlowTheme.of(context).customColor3,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Divider(
+                          thickness: 1.0,
+                          indent: 14.0,
+                          endIndent: 14.0,
+                          color: Color(0xFFD3D6E3),
+                        ),
+                        InkWell(
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () async {
+                            showModalBottomSheet(
+                              isScrollControlled: true,
+                              backgroundColor: Colors.transparent,
+                              context: context,
+                              builder: (context) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    FocusScope.of(context).unfocus();
+                                    FocusManager.instance.primaryFocus
+                                        ?.unfocus();
+                                  },
+                                  child: Padding(
+                                    padding: MediaQuery.viewInsetsOf(context),
+                                    child: Container(
+                                      height:
+                                          MediaQuery.sizeOf(context).height *
+                                              1.0,
+                                      child: ResetProgressPOPWidget(),
+                                    ),
                                   ),
+                                );
+                              },
+                            ).then((value) => safeSetState(() {}));
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(),
+                            child: Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  14.0, 8.0, 14.0, 8.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Сбросить прогресс',
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .override(
+                                          fontFamily: 'Gazprombank',
+                                          color: FlutterFlowTheme.of(context)
+                                              .primaryText,
+                                          fontSize: 16.0,
+                                          letterSpacing: 0.0,
+                                        ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
                 Align(

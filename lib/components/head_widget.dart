@@ -141,7 +141,10 @@ class _HeadWidgetState extends State<HeadWidget> with TickerProviderStateMixin {
                             ),
                       ),
                       Text(
-                        '${FFAppState().userData.finLevel.toString()}%',
+                        valueOrDefault<String>(
+                          '${FFAppState().userData.finLevel > 100.0 ? '100' : FFAppState().userData.finLevel.toString()}%',
+                          '0',
+                        ),
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
                               fontFamily: 'Gazprombank',
                               letterSpacing: 0.0,
@@ -217,6 +220,8 @@ class _HeadWidgetState extends State<HeadWidget> with TickerProviderStateMixin {
                                 .bodyMedium
                                 .override(
                                   fontFamily: 'Halvar Web',
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryText,
                                   letterSpacing: 0.0,
                                   fontWeight: FontWeight.w500,
                                 ),

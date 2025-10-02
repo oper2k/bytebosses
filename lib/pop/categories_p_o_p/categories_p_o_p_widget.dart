@@ -1,16 +1,29 @@
+import '/backend/schema/structs/index.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/pop/no_money_p_o_p/no_money_p_o_p_widget.dart';
 import 'dart:ui';
+import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
+import 'package:community_testing_ryusdv/app_state.dart'
+    as community_testing_ryusdv_app_state;
 import 'package:ff_theme/flutter_flow/flutter_flow_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:provider/provider.dart';
 import 'categories_p_o_p_model.dart';
 export 'categories_p_o_p_model.dart';
 
 class CategoriesPOPWidget extends StatefulWidget {
-  const CategoriesPOPWidget({super.key});
+  const CategoriesPOPWidget({
+    super.key,
+    required this.category,
+    this.lastPlayedCardId,
+  });
+
+  final CategoryStruct? category;
+  final String? lastPlayedCardId;
 
   @override
   State<CategoriesPOPWidget> createState() => _CategoriesPOPWidgetState();
@@ -66,6 +79,9 @@ class _CategoriesPOPWidgetState extends State<CategoriesPOPWidget>
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+    context.watch<community_testing_ryusdv_app_state.FFAppState>();
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(0.0),
       child: BackdropFilter(
@@ -141,7 +157,15 @@ class _CategoriesPOPWidgetState extends State<CategoriesPOPWidget>
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       16.0, 0.0, 16.0, 0.0),
                                   child: Text(
-                                    'Откроется через 14:30:15',
+                                    (FFAppState().userData.loginDates.length >=
+                                                widget.category!
+                                                    .requiredGameDays) ||
+                                            FFAppState()
+                                                .userData
+                                                .purchasedCategoriesIds
+                                                .contains(widget.category?.id)
+                                        ? 'Категория открыта'
+                                        : 'Откроется завтра',
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .override(
@@ -160,7 +184,10 @@ class _CategoriesPOPWidgetState extends State<CategoriesPOPWidget>
                           padding: EdgeInsetsDirectional.fromSTEB(
                               0.0, 22.0, 0.0, 0.0),
                           child: Text(
-                            'Сердце и кошелёк',
+                            valueOrDefault<String>(
+                              widget.category?.name,
+                              'CategoryName',
+                            ),
                             textAlign: TextAlign.center,
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium
@@ -176,7 +203,10 @@ class _CategoriesPOPWidgetState extends State<CategoriesPOPWidget>
                           padding: EdgeInsetsDirectional.fromSTEB(
                               0.0, 14.0, 0.0, 0.0),
                           child: Text(
-                            'Твоя симпатия зовёт на свидание.  Ты — с 1000 ₽ и выбором, как всё не испортить..',
+                            valueOrDefault<String>(
+                              widget.category?.description,
+                              'description',
+                            ),
                             textAlign: TextAlign.start,
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium
@@ -200,7 +230,7 @@ class _CategoriesPOPWidgetState extends State<CategoriesPOPWidget>
                                 fit: BoxFit.cover,
                               ),
                               Text(
-                                '10 вопросов',
+                                '${widget.category?.cardsCount.toString()} вопросов',
                                 style: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .override(
@@ -244,7 +274,7 @@ class _CategoriesPOPWidgetState extends State<CategoriesPOPWidget>
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      '+100',
+                                      '+${widget.category?.completeCategoryRewardCoins.toString()}',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
@@ -284,7 +314,10 @@ class _CategoriesPOPWidgetState extends State<CategoriesPOPWidget>
                               ),
                               Expanded(
                                 child: Text(
-                                  'Повышенный кэшбэк +2% на покупки в кафе и ресторанах на 7 дней',
+                                  valueOrDefault<String>(
+                                    widget.category?.completeCategoryBonusText,
+                                    'bonusText',
+                                  ),
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
@@ -297,75 +330,181 @@ class _CategoriesPOPWidgetState extends State<CategoriesPOPWidget>
                             ].divide(SizedBox(width: 10.0)),
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 32.0, 0.0, 0.0),
-                          child: FFButtonWidget(
-                            onPressed: () async {
-                              context.pushNamed(LavkaWidget.routeName);
-                            },
-                            text: 'Играть',
-                            options: FFButtonOptions(
+                        if ((FFAppState().userData.loginDates.length >=
+                                widget.category!.requiredGameDays) ||
+                            FFAppState()
+                                .userData
+                                .purchasedCategoriesIds
+                                .contains(widget.category?.id))
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 32.0, 0.0, 0.0),
+                            child: FFButtonWidget(
+                              onPressed: () async {
+                                context.goNamed(
+                                  QuestionWidget.routeName,
+                                  queryParameters: {
+                                    'category': serializeParam(
+                                      widget.category,
+                                      ParamType.DataStruct,
+                                    ),
+                                    'lastPlayedCardId': serializeParam(
+                                      widget.lastPlayedCardId,
+                                      ParamType.String,
+                                    ),
+                                  }.withoutNulls,
+                                  extra: <String, dynamic>{
+                                    kTransitionInfoKey: TransitionInfo(
+                                      hasTransition: true,
+                                      transitionType: PageTransitionType.fade,
+                                      duration: Duration(milliseconds: 0),
+                                    ),
+                                  },
+                                );
+                              },
+                              text: functions.returnLastPlayedCard(
+                                              widget.category!.cardsCount,
+                                              widget.category!.id,
+                                              FFAppState()
+                                                  .userData
+                                                  .completedCardsIds
+                                                  .toList()) !=
+                                          null &&
+                                      functions.returnLastPlayedCard(
+                                              widget.category!.cardsCount,
+                                              widget.category!.id,
+                                              FFAppState()
+                                                  .userData
+                                                  .completedCardsIds
+                                                  .toList()) !=
+                                          ''
+                                  ? 'Продолжить игру'
+                                  : 'Играть',
+                              options: FFButtonOptions(
+                                width: double.infinity,
+                                height: 52.0,
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    16.0, 0.0, 16.0, 0.0),
+                                iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 0.0, 0.0, 0.0),
+                                color: FlutterFlowTheme.of(context).primary,
+                                textStyle: FlutterFlowTheme.of(context)
+                                    .titleSmall
+                                    .override(
+                                      fontFamily: 'Gazprombank',
+                                      color: Colors.white,
+                                      fontSize: 18.0,
+                                      letterSpacing: 0.0,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                elevation: 0.0,
+                                borderRadius: BorderRadius.circular(12.0),
+                              ),
+                            ),
+                          ),
+                        if ((FFAppState().userData.loginDates.length <
+                                widget.category!.requiredGameDays) &&
+                            !FFAppState()
+                                .userData
+                                .purchasedCategoriesIds
+                                .contains(widget.category?.id))
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 32.0, 0.0, 0.0),
+                            child: Container(
                               width: double.infinity,
                               height: 52.0,
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  16.0, 0.0, 16.0, 0.0),
-                              iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 0.0),
-                              color: FlutterFlowTheme.of(context).primary,
-                              textStyle: FlutterFlowTheme.of(context)
-                                  .titleSmall
-                                  .override(
-                                    fontFamily: 'Gazprombank',
-                                    color: Colors.white,
-                                    fontSize: 18.0,
-                                    letterSpacing: 0.0,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                              elevation: 0.0,
-                              borderRadius: BorderRadius.circular(12.0),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 32.0, 0.0, 0.0),
-                          child: Container(
-                            width: double.infinity,
-                            height: 52.0,
-                            decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context).primary,
-                              borderRadius: BorderRadius.circular(12.0),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Играть за 500',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
-                                        fontFamily: 'Gazprombank',
-                                        color:
-                                            FlutterFlowTheme.of(context).info,
-                                        fontSize: 18.0,
-                                        letterSpacing: 0.0,
+                              decoration: BoxDecoration(
+                                color: FlutterFlowTheme.of(context).primary,
+                                borderRadius: BorderRadius.circular(12.0),
+                              ),
+                              child: InkWell(
+                                splashColor: Colors.transparent,
+                                focusColor: Colors.transparent,
+                                hoverColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
+                                onTap: () async {
+                                  if (FFAppState().userData.coins >=
+                                      FFAppConstants.openCategoryCoinsPrice) {
+                                    FFAppState().updateUserDataStruct(
+                                      (e) => e
+                                        ..incrementCoins(-FFAppConstants
+                                            .openCategoryCoinsPrice)
+                                        ..updatePurchasedCategoriesIds(
+                                          (e) => e.add(widget.category!.id),
+                                        ),
+                                    );
+                                    FFAppState().isShowCoinsAnimation = true;
+                                    safeSetState(() {});
+
+                                    context.goNamed(
+                                      QuestionWidget.routeName,
+                                      queryParameters: {
+                                        'category': serializeParam(
+                                          widget.category,
+                                          ParamType.DataStruct,
+                                        ),
+                                      }.withoutNulls,
+                                      extra: <String, dynamic>{
+                                        kTransitionInfoKey: TransitionInfo(
+                                          hasTransition: true,
+                                          transitionType:
+                                              PageTransitionType.fade,
+                                          duration: Duration(milliseconds: 0),
+                                        ),
+                                      },
+                                    );
+                                  } else {
+                                    Navigator.pop(context);
+                                    showModalBottomSheet(
+                                      isScrollControlled: true,
+                                      backgroundColor: Colors.transparent,
+                                      context: context,
+                                      builder: (context) {
+                                        return Padding(
+                                          padding:
+                                              MediaQuery.viewInsetsOf(context),
+                                          child: Container(
+                                            height: MediaQuery.sizeOf(context)
+                                                    .height *
+                                                1.0,
+                                            child: NoMoneyPOPWidget(),
+                                          ),
+                                        );
+                                      },
+                                    ).then((value) => safeSetState(() {}));
+                                  }
+                                },
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Играть за ${FFAppConstants.openCategoryCoinsPrice.toString()}',
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .override(
+                                            fontFamily: 'Gazprombank',
+                                            color: FlutterFlowTheme.of(context)
+                                                .info,
+                                            fontSize: 18.0,
+                                            letterSpacing: 0.0,
+                                          ),
+                                    ),
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      child: Image.asset(
+                                        'assets/images/coin.webp',
+                                        width: 20.0,
+                                        height: 20.0,
+                                        fit: BoxFit.cover,
                                       ),
+                                    ),
+                                  ].divide(SizedBox(width: 6.0)),
                                 ),
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(8.0),
-                                  child: Image.asset(
-                                    'assets/images/coin.webp',
-                                    width: 20.0,
-                                    height: 20.0,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ].divide(SizedBox(width: 6.0)),
+                              ),
                             ),
                           ),
-                        ),
                       ]
                           .addToStart(SizedBox(height: 12.0))
                           .addToEnd(SizedBox(height: 36.0)),

@@ -4,8 +4,8 @@ import '/components/close_widget.dart';
 import '/components/head_widget.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/flutter_flow/flutter_flow_video_player.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/index.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ff_theme/flutter_flow/flutter_flow_theme.dart';
@@ -903,20 +903,24 @@ class _QuestionWidgetState extends State<QuestionWidget>
                                                           ).image,
                                                         ),
                                                       ),
-                                                      child:
-                                                          FlutterFlowVideoPlayer(
-                                                        path:
-                                                            'https://s3.ru1.storage.beget.cloud/ab5e585e3692-learned-soren/bear_loop.mp4',
-                                                        videoType:
-                                                            VideoType.network,
+                                                      child: Container(
+                                                        width:
+                                                            MediaQuery.sizeOf(
+                                                                        context)
+                                                                    .width *
+                                                                1.0,
                                                         height: 180.0,
-                                                        autoPlay: true,
-                                                        looping: true,
-                                                        showControls: false,
-                                                        allowFullScreen: false,
-                                                        allowPlaybackSpeedMenu:
-                                                            false,
-                                                        pauseOnNavigate: false,
+                                                        child: custom_widgets
+                                                            .CustomVideoPlayer(
+                                                          width:
+                                                              MediaQuery.sizeOf(
+                                                                          context)
+                                                                      .width *
+                                                                  1.0,
+                                                          height: 180.0,
+                                                          videoUrl:
+                                                              'https://s3.ru1.storage.beget.cloud/ab5e585e3692-learned-soren/bear_loop.mp4',
+                                                        ),
                                                       ),
                                                     ),
                                                     Text(
@@ -1059,20 +1063,24 @@ class _QuestionWidgetState extends State<QuestionWidget>
                                                           ).image,
                                                         ),
                                                       ),
-                                                      child:
-                                                          FlutterFlowVideoPlayer(
-                                                        path:
-                                                            'https://s3.ru1.storage.beget.cloud/ab5e585e3692-learned-soren/bear_loop.mp4',
-                                                        videoType:
-                                                            VideoType.network,
+                                                      child: Container(
+                                                        width:
+                                                            MediaQuery.sizeOf(
+                                                                        context)
+                                                                    .width *
+                                                                1.0,
                                                         height: 180.0,
-                                                        autoPlay: true,
-                                                        looping: true,
-                                                        showControls: false,
-                                                        allowFullScreen: false,
-                                                        allowPlaybackSpeedMenu:
-                                                            false,
-                                                        pauseOnNavigate: false,
+                                                        child: custom_widgets
+                                                            .CustomVideoPlayer(
+                                                          width:
+                                                              MediaQuery.sizeOf(
+                                                                          context)
+                                                                      .width *
+                                                                  1.0,
+                                                          height: 180.0,
+                                                          videoUrl:
+                                                              'https://s3.ru1.storage.beget.cloud/ab5e585e3692-learned-soren/bear_loop.mp4',
+                                                        ),
                                                       ),
                                                     ),
                                                     Text(
@@ -1221,6 +1229,10 @@ class _QuestionWidgetState extends State<QuestionWidget>
                                                   'category': serializeParam(
                                                     widget.category,
                                                     ParamType.DataStruct,
+                                                  ),
+                                                  'isPlayAgain': serializeParam(
+                                                    widget.isPlayAgain,
+                                                    ParamType.bool,
                                                   ),
                                                 }.withoutNulls,
                                                 extra: <String, dynamic>{

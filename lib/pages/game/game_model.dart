@@ -3,7 +3,6 @@ import '/components/close_widget.dart';
 import '/components/head_widget.dart';
 import '/components/tab_bar_widget.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/index.dart';
 import 'game_widget.dart' show GameWidget;
 import 'package:flutter/material.dart';
 

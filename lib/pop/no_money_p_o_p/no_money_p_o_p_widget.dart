@@ -162,6 +162,8 @@ class _NoMoneyPOPWidgetState extends State<NoMoneyPOPWidget>
                               0.0, 32.0, 0.0, 0.0),
                           child: FFButtonWidget(
                             onPressed: () async {
+                              Navigator.pop(context);
+
                               context.pushNamed(LavkaWidget.routeName);
                             },
                             text: 'В Лавку',

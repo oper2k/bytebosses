@@ -3,10 +3,12 @@ import '/components/close_widget.dart';
 import '/components/head_widget.dart';
 import '/components/tab_bar_widget.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/pop/categories_p_o_p/categories_p_o_p_widget.dart';
 import '/pop/category_p_o_p/category_p_o_p_widget.dart';
+import '/pop/onboarding_p_o_p/onboarding_p_o_p_widget.dart';
 import '/pop/play_again_p_o_p/play_again_p_o_p_widget.dart';
+import '/pop/week_p_o_p/week_p_o_p_widget.dart';
 import '/flutter_flow/custom_functions.dart' as functions;
-import '/index.dart';
 import 'package:community_testing_ryusdv/app_state.dart'
     as community_testing_ryusdv_app_state;
 import 'package:cached_network_image/cached_network_image.dart';
@@ -40,26 +42,60 @@ class _GameWidgetState extends State<GameWidget> {
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      if ((FFAppState().userData.firstLoginDate != null) &&
-          (dateTimeFormat(
-                "d/M/y",
-                FFAppState().userData.firstLoginDate,
-                locale: FFLocalizations.of(context).languageCode,
-              ) !=
-              dateTimeFormat(
-                "d/M/y",
-                getCurrentTimestamp,
-                locale: FFLocalizations.of(context).languageCode,
-              ))) {
-        FFAppState().updateUserDataStruct(
-          (e) => e..daysInGame = 1,
+      if (!FFAppState().userData.isViewedOnboardingPopup) {
+        await showModalBottomSheet(
+          isScrollControlled: true,
+          backgroundColor: Colors.transparent,
+          isDismissible: false,
+          context: context,
+          builder: (context) {
+            return GestureDetector(
+              onTap: () {
+                FocusScope.of(context).unfocus();
+                FocusManager.instance.primaryFocus?.unfocus();
+              },
+              child: Padding(
+                padding: MediaQuery.viewInsetsOf(context),
+                child: Container(
+                  height: MediaQuery.sizeOf(context).height * 1.0,
+                  child: OnboardingPOPWidget(),
+                ),
+              ),
+            );
+          },
+        ).then((value) => safeSetState(() {}));
+      }
+      if (!FFAppState().userData.loginDates.contains(dateTimeFormat(
+            "d/M/y",
+            getCurrentTimestamp,
+            locale: FFLocalizations.of(context).languageCode,
+          ))) {
+        await Future.delayed(
+          Duration(
+            milliseconds: 1000,
+          ),
         );
-        safeSetState(() {});
-      } else {
-        FFAppState().updateUserDataStruct(
-          (e) => e..firstLoginDate = getCurrentTimestamp,
-        );
-        safeSetState(() {});
+        await showModalBottomSheet(
+          isScrollControlled: true,
+          backgroundColor: Colors.transparent,
+          isDismissible: false,
+          context: context,
+          builder: (context) {
+            return GestureDetector(
+              onTap: () {
+                FocusScope.of(context).unfocus();
+                FocusManager.instance.primaryFocus?.unfocus();
+              },
+              child: Padding(
+                padding: MediaQuery.viewInsetsOf(context),
+                child: Container(
+                  height: MediaQuery.sizeOf(context).height * 1.0,
+                  child: WeekPOPWidget(),
+                ),
+              ),
+            );
+          },
+        ).then((value) => safeSetState(() {}));
       }
     });
 
@@ -207,10 +243,15 @@ class _GameWidgetState extends State<GameWidget> {
                                         final categoryToday = FFAppState()
                                             .gameCategories
                                             .where((e) =>
+                                                (FFAppState()
+                                                        .userData
+                                                        .loginDates
+                                                        .length >=
+                                                    e.requiredGameDays) ||
                                                 FFAppState()
                                                     .userData
-                                                    .daysInGame >=
-                                                e.requiredGameDays)
+                                                    .purchasedCategoriesIds
+                                                    .contains(e.id))
                                             .toList()
                                             .sortedList(
                                                 keyOf: (e) => e.order,
@@ -242,40 +283,50 @@ class _GameWidgetState extends State<GameWidget> {
                                                     .completedCategoriesIds
                                                     .contains(
                                                         categoryTodayItem.id)) {
-                                                  context.goNamed(
-                                                    QuestionWidget.routeName,
-                                                    queryParameters: {
-                                                      'category':
-                                                          serializeParam(
-                                                        categoryTodayItem,
-                                                        ParamType.DataStruct,
-                                                      ),
-                                                      'lastPlayedCardId':
-                                                          serializeParam(
-                                                        functions.returnLastPlayedCard(
-                                                            categoryTodayItem
-                                                                .cardsCount,
-                                                            categoryTodayItem
-                                                                .id,
-                                                            FFAppState()
-                                                                .userData
-                                                                .completedCardsIds
-                                                                .toList()),
-                                                        ParamType.String,
-                                                      ),
-                                                    }.withoutNulls,
-                                                    extra: <String, dynamic>{
-                                                      kTransitionInfoKey:
-                                                          TransitionInfo(
-                                                        hasTransition: true,
-                                                        transitionType:
-                                                            PageTransitionType
-                                                                .fade,
-                                                        duration: Duration(
-                                                            milliseconds: 0),
-                                                      ),
+                                                  showModalBottomSheet(
+                                                    isScrollControlled: true,
+                                                    backgroundColor:
+                                                        Colors.transparent,
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return GestureDetector(
+                                                        onTap: () {
+                                                          FocusScope.of(context)
+                                                              .unfocus();
+                                                          FocusManager.instance
+                                                              .primaryFocus
+                                                              ?.unfocus();
+                                                        },
+                                                        child: Padding(
+                                                          padding: MediaQuery
+                                                              .viewInsetsOf(
+                                                                  context),
+                                                          child: Container(
+                                                            height: MediaQuery
+                                                                        .sizeOf(
+                                                                            context)
+                                                                    .height *
+                                                                1.0,
+                                                            child:
+                                                                CategoriesPOPWidget(
+                                                              category:
+                                                                  categoryTodayItem,
+                                                              lastPlayedCardId: functions.returnLastPlayedCard(
+                                                                  categoryTodayItem
+                                                                      .cardsCount,
+                                                                  categoryTodayItem
+                                                                      .id,
+                                                                  FFAppState()
+                                                                      .userData
+                                                                      .completedCardsIds
+                                                                      .toList()),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      );
                                                     },
-                                                  );
+                                                  ).then((value) =>
+                                                      safeSetState(() {}));
                                                 } else {
                                                   showModalBottomSheet(
                                                     isScrollControlled: true,
@@ -465,79 +516,93 @@ class _GameWidgetState extends State<GameWidget> {
                               Column(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
-                                  Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Text(
-                                        'Категории завтра',
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .override(
-                                              fontFamily: 'Halvar Web',
-                                              fontSize: 20.0,
-                                              letterSpacing: 0.0,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                      InkWell(
-                                        splashColor: Colors.transparent,
-                                        focusColor: Colors.transparent,
-                                        hoverColor: Colors.transparent,
-                                        highlightColor: Colors.transparent,
-                                        onTap: () async {
-                                          showModalBottomSheet(
-                                            isScrollControlled: true,
-                                            backgroundColor: Colors.transparent,
-                                            context: context,
-                                            builder: (context) {
-                                              return GestureDetector(
-                                                onTap: () {
-                                                  FocusScope.of(context)
-                                                      .unfocus();
-                                                  FocusManager
-                                                      .instance.primaryFocus
-                                                      ?.unfocus();
-                                                },
-                                                child: Padding(
-                                                  padding:
-                                                      MediaQuery.viewInsetsOf(
-                                                          context),
-                                                  child: Container(
-                                                    height: MediaQuery.sizeOf(
-                                                                context)
-                                                            .height *
-                                                        1.0,
-                                                    child: CategoryPOPWidget(),
+                                  if (FFAppState()
+                                          .gameCategories
+                                          .where((e) =>
+                                              FFAppState()
+                                                  .userData
+                                                  .loginDates
+                                                  .length <
+                                              e.requiredGameDays)
+                                          .toList()
+                                          .length >
+                                      0)
+                                    Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Text(
+                                          'Категории завтра',
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium
+                                              .override(
+                                                fontFamily: 'Halvar Web',
+                                                fontSize: 20.0,
+                                                letterSpacing: 0.0,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                        ),
+                                        InkWell(
+                                          splashColor: Colors.transparent,
+                                          focusColor: Colors.transparent,
+                                          hoverColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          onTap: () async {
+                                            showModalBottomSheet(
+                                              isScrollControlled: true,
+                                              backgroundColor:
+                                                  Colors.transparent,
+                                              context: context,
+                                              builder: (context) {
+                                                return GestureDetector(
+                                                  onTap: () {
+                                                    FocusScope.of(context)
+                                                        .unfocus();
+                                                    FocusManager
+                                                        .instance.primaryFocus
+                                                        ?.unfocus();
+                                                  },
+                                                  child: Padding(
+                                                    padding:
+                                                        MediaQuery.viewInsetsOf(
+                                                            context),
+                                                    child: Container(
+                                                      height: MediaQuery.sizeOf(
+                                                                  context)
+                                                              .height *
+                                                          1.0,
+                                                      child:
+                                                          CategoryPOPWidget(),
+                                                    ),
                                                   ),
-                                                ),
-                                              );
-                                            },
-                                          ).then(
-                                              (value) => safeSetState(() {}));
-                                        },
-                                        child: Container(
-                                          width: 20.0,
-                                          height: 20.0,
-                                          decoration: BoxDecoration(
-                                            color: FlutterFlowTheme.of(context)
-                                                .secondaryBackground,
-                                            shape: BoxShape.circle,
-                                          ),
-                                          child: Align(
-                                            alignment:
-                                                AlignmentDirectional(0.0, 0.0),
-                                            child: FaIcon(
-                                              FontAwesomeIcons.question,
+                                                );
+                                              },
+                                            ).then(
+                                                (value) => safeSetState(() {}));
+                                          },
+                                          child: Container(
+                                            width: 20.0,
+                                            height: 20.0,
+                                            decoration: BoxDecoration(
                                               color:
                                                   FlutterFlowTheme.of(context)
-                                                      .primaryText,
-                                              size: 14.0,
+                                                      .secondaryBackground,
+                                              shape: BoxShape.circle,
+                                            ),
+                                            child: Align(
+                                              alignment: AlignmentDirectional(
+                                                  0.0, 0.0),
+                                              child: FaIcon(
+                                                FontAwesomeIcons.question,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryText,
+                                                size: 14.0,
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    ].divide(SizedBox(width: 6.0)),
-                                  ),
+                                      ].divide(SizedBox(width: 6.0)),
+                                    ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         0.0, 16.0, 0.0, 0.0),
@@ -546,10 +611,15 @@ class _GameWidgetState extends State<GameWidget> {
                                         final catagoryTomorrow = FFAppState()
                                             .gameCategories
                                             .where((e) =>
-                                                FFAppState()
+                                                (FFAppState()
+                                                        .userData
+                                                        .loginDates
+                                                        .length <
+                                                    e.requiredGameDays) &&
+                                                !FFAppState()
                                                     .userData
-                                                    .daysInGame <
-                                                e.requiredGameDays)
+                                                    .purchasedCategoriesIds
+                                                    .contains(e.id))
                                             .toList()
                                             .sortedList(
                                                 keyOf: (e) => e.order,
@@ -569,89 +639,161 @@ class _GameWidgetState extends State<GameWidget> {
                                             final catagoryTomorrowItem =
                                                 catagoryTomorrow[
                                                     catagoryTomorrowIndex];
-                                            return Container(
-                                              width: double.infinity,
-                                              decoration: BoxDecoration(
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .secondaryBackground,
-                                                borderRadius:
-                                                    BorderRadius.circular(12.0),
-                                              ),
-                                              child: Padding(
-                                                padding: EdgeInsets.all(10.0),
-                                                child: Row(
-                                                  mainAxisSize:
-                                                      MainAxisSize.max,
-                                                  children: [
-                                                    CachedNetworkImage(
-                                                      fadeInDuration: Duration(
-                                                          milliseconds: 100),
-                                                      fadeOutDuration: Duration(
-                                                          milliseconds: 100),
-                                                      imageUrl: valueOrDefault<
-                                                          String>(
-                                                        catagoryTomorrowItem
-                                                            .image,
-                                                        'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/hackathon-p74jkp/assets/by5kx3ta0hzj/cashHeart.webp',
-                                                      ),
-                                                      width: 64.0,
-                                                      height: 64.0,
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                    Flexible(
+                                            return InkWell(
+                                              splashColor: Colors.transparent,
+                                              focusColor: Colors.transparent,
+                                              hoverColor: Colors.transparent,
+                                              highlightColor:
+                                                  Colors.transparent,
+                                              onTap: () async {
+                                                showModalBottomSheet(
+                                                  isScrollControlled: true,
+                                                  backgroundColor:
+                                                      Colors.transparent,
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return GestureDetector(
+                                                      onTap: () {
+                                                        FocusScope.of(context)
+                                                            .unfocus();
+                                                        FocusManager.instance
+                                                            .primaryFocus
+                                                            ?.unfocus();
+                                                      },
                                                       child: Padding(
-                                                        padding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                    0.0,
-                                                                    11.0,
-                                                                    14.0,
-                                                                    11.0),
-                                                        child: Column(
-                                                          mainAxisSize:
-                                                              MainAxisSize.max,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Text(
-                                                              catagoryTomorrowItem
-                                                                  .name,
-                                                              style: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .bodyMedium
-                                                                  .override(
-                                                                    fontFamily:
-                                                                        'Gazprombank',
-                                                                    fontSize:
-                                                                        18.0,
-                                                                    letterSpacing:
-                                                                        0.0,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w600,
-                                                                  ),
-                                                            ),
-                                                            Text(
-                                                              '${catagoryTomorrowItem.cardsCount.toString()} вопросов',
-                                                              style: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .bodyMedium
-                                                                  .override(
-                                                                    fontFamily:
-                                                                        'Gazprombank',
-                                                                    letterSpacing:
-                                                                        0.0,
-                                                                  ),
-                                                            ),
-                                                          ].divide(SizedBox(
-                                                              height: 10.0)),
+                                                        padding: MediaQuery
+                                                            .viewInsetsOf(
+                                                                context),
+                                                        child: Container(
+                                                          height:
+                                                              MediaQuery.sizeOf(
+                                                                          context)
+                                                                      .height *
+                                                                  1.0,
+                                                          child:
+                                                              CategoriesPOPWidget(
+                                                            category:
+                                                                catagoryTomorrowItem,
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                  ].divide(
-                                                      SizedBox(width: 16.0)),
+                                                    );
+                                                  },
+                                                ).then((value) =>
+                                                    safeSetState(() {}));
+                                              },
+                                              child: Container(
+                                                width: double.infinity,
+                                                decoration: BoxDecoration(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .secondaryBackground,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          12.0),
+                                                ),
+                                                child: Padding(
+                                                  padding: EdgeInsets.all(10.0),
+                                                  child: Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    children: [
+                                                      CachedNetworkImage(
+                                                        fadeInDuration:
+                                                            Duration(
+                                                                milliseconds:
+                                                                    100),
+                                                        fadeOutDuration:
+                                                            Duration(
+                                                                milliseconds:
+                                                                    100),
+                                                        imageUrl:
+                                                            valueOrDefault<
+                                                                String>(
+                                                          catagoryTomorrowItem
+                                                              .image,
+                                                          'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/hackathon-p74jkp/assets/by5kx3ta0hzj/cashHeart.webp',
+                                                        ),
+                                                        width: 64.0,
+                                                        height: 64.0,
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                      Flexible(
+                                                        child: Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(
+                                                                      0.0,
+                                                                      11.0,
+                                                                      14.0,
+                                                                      11.0),
+                                                          child: Column(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .max,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .stretch,
+                                                            children: [
+                                                              Text(
+                                                                catagoryTomorrowItem
+                                                                    .name,
+                                                                style: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .override(
+                                                                      fontFamily:
+                                                                          'Gazprombank',
+                                                                      fontSize:
+                                                                          18.0,
+                                                                      letterSpacing:
+                                                                          0.0,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w600,
+                                                                    ),
+                                                              ),
+                                                              Text(
+                                                                '${catagoryTomorrowItem.cardsCount.toString()} вопросов',
+                                                                style: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .override(
+                                                                      fontFamily:
+                                                                          'Gazprombank',
+                                                                      letterSpacing:
+                                                                          0.0,
+                                                                    ),
+                                                              ),
+                                                            ].divide(SizedBox(
+                                                                height: 10.0)),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Align(
+                                                        alignment:
+                                                            AlignmentDirectional(
+                                                                1.0, 0.0),
+                                                        child: Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(
+                                                                      0.0,
+                                                                      0.0,
+                                                                      16.0,
+                                                                      0.0),
+                                                          child: Icon(
+                                                            Icons.lock,
+                                                            color: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .alternate,
+                                                            size: 28.0,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ].divide(
+                                                        SizedBox(width: 16.0)),
+                                                  ),
                                                 ),
                                               ),
                                             );

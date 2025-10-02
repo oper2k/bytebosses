@@ -14,9 +14,11 @@ class UserStruct extends BaseStruct {
     List<String>? completedCategoriesIds,
     List<String>? completedCardsIds,
     List<String>? completedAchievements,
-    int? daysInGame,
-    DateTime? firstLoginDate,
+    List<String>? loginDates,
     bool? isEnablePush,
+    List<String>? purchasedCategoriesIds,
+    bool? isViewedBankruptPopup,
+    bool? isViewedOnboardingPopup,
   })  : _name = name,
         _finLevel = finLevel,
         _coins = coins,
@@ -24,9 +26,11 @@ class UserStruct extends BaseStruct {
         _completedCategoriesIds = completedCategoriesIds,
         _completedCardsIds = completedCardsIds,
         _completedAchievements = completedAchievements,
-        _daysInGame = daysInGame,
-        _firstLoginDate = firstLoginDate,
-        _isEnablePush = isEnablePush;
+        _loginDates = loginDates,
+        _isEnablePush = isEnablePush,
+        _purchasedCategoriesIds = purchasedCategoriesIds,
+        _isViewedBankruptPopup = isViewedBankruptPopup,
+        _isViewedOnboardingPopup = isViewedOnboardingPopup;
 
   // "name" field.
   String? _name;
@@ -99,21 +103,16 @@ class UserStruct extends BaseStruct {
 
   bool hasCompletedAchievements() => _completedAchievements != null;
 
-  // "daysInGame" field.
-  int? _daysInGame;
-  int get daysInGame => _daysInGame ?? 0;
-  set daysInGame(int? val) => _daysInGame = val;
+  // "loginDates" field.
+  List<String>? _loginDates;
+  List<String> get loginDates => _loginDates ?? const [];
+  set loginDates(List<String>? val) => _loginDates = val;
 
-  void incrementDaysInGame(int amount) => daysInGame = daysInGame + amount;
+  void updateLoginDates(Function(List<String>) updateFn) {
+    updateFn(_loginDates ??= []);
+  }
 
-  bool hasDaysInGame() => _daysInGame != null;
-
-  // "firstLoginDate" field.
-  DateTime? _firstLoginDate;
-  DateTime? get firstLoginDate => _firstLoginDate;
-  set firstLoginDate(DateTime? val) => _firstLoginDate = val;
-
-  bool hasFirstLoginDate() => _firstLoginDate != null;
+  bool hasLoginDates() => _loginDates != null;
 
   // "isEnablePush" field.
   bool? _isEnablePush;
@@ -121,6 +120,33 @@ class UserStruct extends BaseStruct {
   set isEnablePush(bool? val) => _isEnablePush = val;
 
   bool hasIsEnablePush() => _isEnablePush != null;
+
+  // "purchased_categories_ids" field.
+  List<String>? _purchasedCategoriesIds;
+  List<String> get purchasedCategoriesIds =>
+      _purchasedCategoriesIds ?? const [];
+  set purchasedCategoriesIds(List<String>? val) =>
+      _purchasedCategoriesIds = val;
+
+  void updatePurchasedCategoriesIds(Function(List<String>) updateFn) {
+    updateFn(_purchasedCategoriesIds ??= []);
+  }
+
+  bool hasPurchasedCategoriesIds() => _purchasedCategoriesIds != null;
+
+  // "isViewedBankruptPopup" field.
+  bool? _isViewedBankruptPopup;
+  bool get isViewedBankruptPopup => _isViewedBankruptPopup ?? false;
+  set isViewedBankruptPopup(bool? val) => _isViewedBankruptPopup = val;
+
+  bool hasIsViewedBankruptPopup() => _isViewedBankruptPopup != null;
+
+  // "isViewedOnboardingPopup" field.
+  bool? _isViewedOnboardingPopup;
+  bool get isViewedOnboardingPopup => _isViewedOnboardingPopup ?? false;
+  set isViewedOnboardingPopup(bool? val) => _isViewedOnboardingPopup = val;
+
+  bool hasIsViewedOnboardingPopup() => _isViewedOnboardingPopup != null;
 
   static UserStruct fromMap(Map<String, dynamic> data) => UserStruct(
         name: data['name'] as String?,
@@ -130,9 +156,11 @@ class UserStruct extends BaseStruct {
         completedCategoriesIds: getDataList(data['completed_categories_ids']),
         completedCardsIds: getDataList(data['completed_cards_ids']),
         completedAchievements: getDataList(data['completed_achievements']),
-        daysInGame: castToType<int>(data['daysInGame']),
-        firstLoginDate: data['firstLoginDate'] as DateTime?,
+        loginDates: getDataList(data['loginDates']),
         isEnablePush: data['isEnablePush'] as bool?,
+        purchasedCategoriesIds: getDataList(data['purchased_categories_ids']),
+        isViewedBankruptPopup: data['isViewedBankruptPopup'] as bool?,
+        isViewedOnboardingPopup: data['isViewedOnboardingPopup'] as bool?,
       );
 
   static UserStruct? maybeFromMap(dynamic data) =>
@@ -146,9 +174,11 @@ class UserStruct extends BaseStruct {
         'completed_categories_ids': _completedCategoriesIds,
         'completed_cards_ids': _completedCardsIds,
         'completed_achievements': _completedAchievements,
-        'daysInGame': _daysInGame,
-        'firstLoginDate': _firstLoginDate,
+        'loginDates': _loginDates,
         'isEnablePush': _isEnablePush,
+        'purchased_categories_ids': _purchasedCategoriesIds,
+        'isViewedBankruptPopup': _isViewedBankruptPopup,
+        'isViewedOnboardingPopup': _isViewedOnboardingPopup,
       }.withoutNulls;
 
   @override
@@ -185,16 +215,26 @@ class UserStruct extends BaseStruct {
           ParamType.String,
           isList: true,
         ),
-        'daysInGame': serializeParam(
-          _daysInGame,
-          ParamType.int,
-        ),
-        'firstLoginDate': serializeParam(
-          _firstLoginDate,
-          ParamType.DateTime,
+        'loginDates': serializeParam(
+          _loginDates,
+          ParamType.String,
+          isList: true,
         ),
         'isEnablePush': serializeParam(
           _isEnablePush,
+          ParamType.bool,
+        ),
+        'purchased_categories_ids': serializeParam(
+          _purchasedCategoriesIds,
+          ParamType.String,
+          isList: true,
+        ),
+        'isViewedBankruptPopup': serializeParam(
+          _isViewedBankruptPopup,
+          ParamType.bool,
+        ),
+        'isViewedOnboardingPopup': serializeParam(
+          _isViewedOnboardingPopup,
           ParamType.bool,
         ),
       }.withoutNulls;
@@ -236,18 +276,28 @@ class UserStruct extends BaseStruct {
           ParamType.String,
           true,
         ),
-        daysInGame: deserializeParam(
-          data['daysInGame'],
-          ParamType.int,
-          false,
-        ),
-        firstLoginDate: deserializeParam(
-          data['firstLoginDate'],
-          ParamType.DateTime,
-          false,
+        loginDates: deserializeParam<String>(
+          data['loginDates'],
+          ParamType.String,
+          true,
         ),
         isEnablePush: deserializeParam(
           data['isEnablePush'],
+          ParamType.bool,
+          false,
+        ),
+        purchasedCategoriesIds: deserializeParam<String>(
+          data['purchased_categories_ids'],
+          ParamType.String,
+          true,
+        ),
+        isViewedBankruptPopup: deserializeParam(
+          data['isViewedBankruptPopup'],
+          ParamType.bool,
+          false,
+        ),
+        isViewedOnboardingPopup: deserializeParam(
+          data['isViewedOnboardingPopup'],
           ParamType.bool,
           false,
         ),
@@ -269,9 +319,12 @@ class UserStruct extends BaseStruct {
         listEquality.equals(completedCardsIds, other.completedCardsIds) &&
         listEquality.equals(
             completedAchievements, other.completedAchievements) &&
-        daysInGame == other.daysInGame &&
-        firstLoginDate == other.firstLoginDate &&
-        isEnablePush == other.isEnablePush;
+        listEquality.equals(loginDates, other.loginDates) &&
+        isEnablePush == other.isEnablePush &&
+        listEquality.equals(
+            purchasedCategoriesIds, other.purchasedCategoriesIds) &&
+        isViewedBankruptPopup == other.isViewedBankruptPopup &&
+        isViewedOnboardingPopup == other.isViewedOnboardingPopup;
   }
 
   @override
@@ -283,9 +336,11 @@ class UserStruct extends BaseStruct {
         completedCategoriesIds,
         completedCardsIds,
         completedAchievements,
-        daysInGame,
-        firstLoginDate,
-        isEnablePush
+        loginDates,
+        isEnablePush,
+        purchasedCategoriesIds,
+        isViewedBankruptPopup,
+        isViewedOnboardingPopup
       ]);
 }
 
@@ -293,15 +348,15 @@ UserStruct createUserStruct({
   String? name,
   double? finLevel,
   int? coins,
-  int? daysInGame,
-  DateTime? firstLoginDate,
   bool? isEnablePush,
+  bool? isViewedBankruptPopup,
+  bool? isViewedOnboardingPopup,
 }) =>
     UserStruct(
       name: name,
       finLevel: finLevel,
       coins: coins,
-      daysInGame: daysInGame,
-      firstLoginDate: firstLoginDate,
       isEnablePush: isEnablePush,
+      isViewedBankruptPopup: isViewedBankruptPopup,
+      isViewedOnboardingPopup: isViewedOnboardingPopup,
     );

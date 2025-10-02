@@ -1,5 +1,6 @@
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/pop/bankrupt_p_o_p/bankrupt_p_o_p_widget.dart';
 import 'package:community_testing_ryusdv/app_state.dart'
     as community_testing_ryusdv_app_state;
 import 'package:flutter/material.dart';
@@ -52,6 +53,27 @@ class _AnimatedCoinsWidgetState extends State<AnimatedCoinsWidget>
       );
       FFAppState().isShowCoinsAnimation = false;
       _model.updatePage(() {});
+      if ((FFAppState().userData.coins < 0) &&
+          !FFAppState().userData.isViewedBankruptPopup) {
+        showModalBottomSheet(
+          isScrollControlled: true,
+          backgroundColor: Colors.transparent,
+          context: context,
+          builder: (context) {
+            return Padding(
+              padding: MediaQuery.viewInsetsOf(context),
+              child: Container(
+                height: MediaQuery.sizeOf(context).height * 1.0,
+                child: BankruptPOPWidget(),
+              ),
+            );
+          },
+        ).then((value) => safeSetState(() {}));
+
+        return;
+      } else {
+        return;
+      }
     });
 
     animationsMap.addAll({

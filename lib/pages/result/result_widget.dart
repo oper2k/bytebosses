@@ -5,6 +5,8 @@ import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/index.dart';
+import 'package:community_testing_ryusdv/app_state.dart'
+    as community_testing_ryusdv_app_state;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ff_theme/flutter_flow/flutter_flow_theme.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +14,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 import 'result_model.dart';
 export 'result_model.dart';
 
@@ -19,9 +22,11 @@ class ResultWidget extends StatefulWidget {
   const ResultWidget({
     super.key,
     required this.category,
-  });
+    bool? isPlayAgain,
+  }) : this.isPlayAgain = isPlayAgain ?? false;
 
   final CategoryStruct? category;
+  final bool isPlayAgain;
 
   static String routeName = 'Result';
   static String routePath = '/result';
@@ -53,6 +58,15 @@ class _ResultWidgetState extends State<ResultWidget>
       _model.soundPlayer!
           .setAsset('assets/audios/congratulation.mp3')
           .then((_) => _model.soundPlayer!.play());
+
+      if (!widget.isPlayAgain) {
+        FFAppState().isShowCoinsAnimation = true;
+        FFAppState().updateUserDataStruct(
+          (e) =>
+              e..incrementCoins(widget.category!.completeCategoryRewardCoins),
+        );
+        safeSetState(() {});
+      }
     });
 
     animationsMap.addAll({
@@ -84,6 +98,9 @@ class _ResultWidgetState extends State<ResultWidget>
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+    context.watch<community_testing_ryusdv_app_state.FFAppState>();
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -110,7 +127,7 @@ class _ResultWidgetState extends State<ResultWidget>
                   alignment: AlignmentDirectional(0.0, 0.0),
                   child: Padding(
                     padding:
-                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 150.0),
+                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 130.0),
                     child: Lottie.asset(
                       'assets/jsons/congrats.json',
                       width: 300.0,
@@ -149,7 +166,7 @@ class _ResultWidgetState extends State<ResultWidget>
                       Spacer(),
                       Padding(
                         padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 92.0),
+                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 32.0),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(0.0),
                           child: CachedNetworkImage(
@@ -184,6 +201,39 @@ class _ResultWidgetState extends State<ResultWidget>
                                   fontWeight: FontWeight.w600,
                                 ),
                           ),
+                          if (!widget.isPlayAgain)
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 8.0, 0.0, 0.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    '+${widget.category?.completeCategoryRewardCoins.toString()}',
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .override(
+                                          fontFamily: 'Halvar Web',
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryText,
+                                          fontSize: 24.0,
+                                          letterSpacing: 0.0,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                  ),
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    child: Image.asset(
+                                      'assets/images/coin.webp',
+                                      width: 20.0,
+                                      height: 20.0,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ].divide(SizedBox(width: 6.0)),
+                              ),
+                            ),
                           if (widget.category?.resultBtnText != null &&
                               widget.category?.resultBtnText != '')
                             Padding(

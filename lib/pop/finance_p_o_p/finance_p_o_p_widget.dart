@@ -1,6 +1,7 @@
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/pop/prize_p_o_p/prize_p_o_p_widget.dart';
 import 'dart:ui';
 import 'package:ff_theme/flutter_flow/flutter_flow_theme.dart';
 import 'package:flutter/material.dart';
@@ -167,8 +168,24 @@ class _FinancePOPWidgetState extends State<FinancePOPWidget>
                                 ),
                               );
                               Navigator.pop(context);
+                              showModalBottomSheet(
+                                isScrollControlled: true,
+                                backgroundColor: Colors.transparent,
+                                context: context,
+                                builder: (context) {
+                                  return Padding(
+                                    padding: MediaQuery.viewInsetsOf(context),
+                                    child: Container(
+                                      height:
+                                          MediaQuery.sizeOf(context).height *
+                                              1.0,
+                                      child: PrizePOPWidget(),
+                                    ),
+                                  );
+                                },
+                              ).then((value) => safeSetState(() {}));
                             },
-                            text: 'Отлично!',
+                            text: 'Узнать о призах',
                             options: FFButtonOptions(
                               width: double.infinity,
                               height: 52.0,
@@ -187,6 +204,41 @@ class _FinancePOPWidgetState extends State<FinancePOPWidget>
                                     fontWeight: FontWeight.normal,
                                   ),
                               elevation: 0.0,
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                            showLoadingIndicator: false,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 16.0, 0.0, 0.0),
+                          child: FFButtonWidget(
+                            onPressed: () async {
+                              Navigator.pop(context);
+                            },
+                            text: 'Вернуться к игре',
+                            options: FFButtonOptions(
+                              width: double.infinity,
+                              height: 52.0,
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  16.0, 0.0, 16.0, 0.0),
+                              iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 0.0, 0.0),
+                              color: Colors.transparent,
+                              textStyle: FlutterFlowTheme.of(context)
+                                  .titleSmall
+                                  .override(
+                                    fontFamily: 'Gazprombank',
+                                    color: FlutterFlowTheme.of(context).primary,
+                                    fontSize: 18.0,
+                                    letterSpacing: 0.0,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                              elevation: 0.0,
+                              borderSide: BorderSide(
+                                color: FlutterFlowTheme.of(context).primary,
+                                width: 2.0,
+                              ),
                               borderRadius: BorderRadius.circular(12.0),
                             ),
                             showLoadingIndicator: false,

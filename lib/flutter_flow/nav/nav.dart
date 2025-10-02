@@ -80,6 +80,10 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) {
             isList: false,
             structBuilder: CategoryStruct.fromSerializableMap,
           ),
+          isPlayAgain: params.getParam(
+            'isPlayAgain',
+            ParamType.bool,
+          ),
         ),
       ),
       FFRoute(
@@ -109,7 +113,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) {
             $community_testing_ryusdv.NotificationsWidget(),
       )
     ].map((r) => r.toRoute(appStateNotifier)).toList(),
-    observers: [routeObserver],
   );
 }
 

@@ -8,6 +8,7 @@ class CategoryStruct extends BaseStruct {
   CategoryStruct({
     String? id,
     String? name,
+    String? description,
     String? image,
     int? cardsCount,
     List<CardStruct>? cardsList,
@@ -18,8 +19,11 @@ class CategoryStruct extends BaseStruct {
     String? resultBtnLink,
     String? unlockAchievementId,
     int? requiredGameDays,
+    int? completeCategoryRewardCoins,
+    String? completeCategoryBonusText,
   })  : _id = id,
         _name = name,
+        _description = description,
         _image = image,
         _cardsCount = cardsCount,
         _cardsList = cardsList,
@@ -29,7 +33,9 @@ class CategoryStruct extends BaseStruct {
         _resultBtnText = resultBtnText,
         _resultBtnLink = resultBtnLink,
         _unlockAchievementId = unlockAchievementId,
-        _requiredGameDays = requiredGameDays;
+        _requiredGameDays = requiredGameDays,
+        _completeCategoryRewardCoins = completeCategoryRewardCoins,
+        _completeCategoryBonusText = completeCategoryBonusText;
 
   // "id" field.
   String? _id;
@@ -44,6 +50,13 @@ class CategoryStruct extends BaseStruct {
   set name(String? val) => _name = val;
 
   bool hasName() => _name != null;
+
+  // "description" field.
+  String? _description;
+  String get description => _description ?? '';
+  set description(String? val) => _description = val;
+
+  bool hasDescription() => _description != null;
 
   // "image" field.
   String? _image;
@@ -126,9 +139,29 @@ class CategoryStruct extends BaseStruct {
 
   bool hasRequiredGameDays() => _requiredGameDays != null;
 
+  // "complete_category_rewardCoins" field.
+  int? _completeCategoryRewardCoins;
+  int get completeCategoryRewardCoins => _completeCategoryRewardCoins ?? 0;
+  set completeCategoryRewardCoins(int? val) =>
+      _completeCategoryRewardCoins = val;
+
+  void incrementCompleteCategoryRewardCoins(int amount) =>
+      completeCategoryRewardCoins = completeCategoryRewardCoins + amount;
+
+  bool hasCompleteCategoryRewardCoins() => _completeCategoryRewardCoins != null;
+
+  // "complete_category_bonusText" field.
+  String? _completeCategoryBonusText;
+  String get completeCategoryBonusText => _completeCategoryBonusText ?? '';
+  set completeCategoryBonusText(String? val) =>
+      _completeCategoryBonusText = val;
+
+  bool hasCompleteCategoryBonusText() => _completeCategoryBonusText != null;
+
   static CategoryStruct fromMap(Map<String, dynamic> data) => CategoryStruct(
         id: data['id'] as String?,
         name: data['name'] as String?,
+        description: data['description'] as String?,
         image: data['image'] as String?,
         cardsCount: castToType<int>(data['cards_count']),
         cardsList: getStructList(
@@ -142,6 +175,10 @@ class CategoryStruct extends BaseStruct {
         resultBtnLink: data['result_btnLink'] as String?,
         unlockAchievementId: data['unlockAchievement_id'] as String?,
         requiredGameDays: castToType<int>(data['requiredGameDays']),
+        completeCategoryRewardCoins:
+            castToType<int>(data['complete_category_rewardCoins']),
+        completeCategoryBonusText:
+            data['complete_category_bonusText'] as String?,
       );
 
   static CategoryStruct? maybeFromMap(dynamic data) =>
@@ -150,6 +187,7 @@ class CategoryStruct extends BaseStruct {
   Map<String, dynamic> toMap() => {
         'id': _id,
         'name': _name,
+        'description': _description,
         'image': _image,
         'cards_count': _cardsCount,
         'cards_list': _cardsList?.map((e) => e.toMap()).toList(),
@@ -160,6 +198,8 @@ class CategoryStruct extends BaseStruct {
         'result_btnLink': _resultBtnLink,
         'unlockAchievement_id': _unlockAchievementId,
         'requiredGameDays': _requiredGameDays,
+        'complete_category_rewardCoins': _completeCategoryRewardCoins,
+        'complete_category_bonusText': _completeCategoryBonusText,
       }.withoutNulls;
 
   @override
@@ -170,6 +210,10 @@ class CategoryStruct extends BaseStruct {
         ),
         'name': serializeParam(
           _name,
+          ParamType.String,
+        ),
+        'description': serializeParam(
+          _description,
           ParamType.String,
         ),
         'image': serializeParam(
@@ -213,6 +257,14 @@ class CategoryStruct extends BaseStruct {
           _requiredGameDays,
           ParamType.int,
         ),
+        'complete_category_rewardCoins': serializeParam(
+          _completeCategoryRewardCoins,
+          ParamType.int,
+        ),
+        'complete_category_bonusText': serializeParam(
+          _completeCategoryBonusText,
+          ParamType.String,
+        ),
       }.withoutNulls;
 
   static CategoryStruct fromSerializableMap(Map<String, dynamic> data) =>
@@ -224,6 +276,11 @@ class CategoryStruct extends BaseStruct {
         ),
         name: deserializeParam(
           data['name'],
+          ParamType.String,
+          false,
+        ),
+        description: deserializeParam(
+          data['description'],
           ParamType.String,
           false,
         ),
@@ -278,6 +335,16 @@ class CategoryStruct extends BaseStruct {
           ParamType.int,
           false,
         ),
+        completeCategoryRewardCoins: deserializeParam(
+          data['complete_category_rewardCoins'],
+          ParamType.int,
+          false,
+        ),
+        completeCategoryBonusText: deserializeParam(
+          data['complete_category_bonusText'],
+          ParamType.String,
+          false,
+        ),
       );
 
   @override
@@ -289,6 +356,7 @@ class CategoryStruct extends BaseStruct {
     return other is CategoryStruct &&
         id == other.id &&
         name == other.name &&
+        description == other.description &&
         image == other.image &&
         cardsCount == other.cardsCount &&
         listEquality.equals(cardsList, other.cardsList) &&
@@ -298,13 +366,16 @@ class CategoryStruct extends BaseStruct {
         resultBtnText == other.resultBtnText &&
         resultBtnLink == other.resultBtnLink &&
         unlockAchievementId == other.unlockAchievementId &&
-        requiredGameDays == other.requiredGameDays;
+        requiredGameDays == other.requiredGameDays &&
+        completeCategoryRewardCoins == other.completeCategoryRewardCoins &&
+        completeCategoryBonusText == other.completeCategoryBonusText;
   }
 
   @override
   int get hashCode => const ListEquality().hash([
         id,
         name,
+        description,
         image,
         cardsCount,
         cardsList,
@@ -314,13 +385,16 @@ class CategoryStruct extends BaseStruct {
         resultBtnText,
         resultBtnLink,
         unlockAchievementId,
-        requiredGameDays
+        requiredGameDays,
+        completeCategoryRewardCoins,
+        completeCategoryBonusText
       ]);
 }
 
 CategoryStruct createCategoryStruct({
   String? id,
   String? name,
+  String? description,
   String? image,
   int? cardsCount,
   int? order,
@@ -330,10 +404,13 @@ CategoryStruct createCategoryStruct({
   String? resultBtnLink,
   String? unlockAchievementId,
   int? requiredGameDays,
+  int? completeCategoryRewardCoins,
+  String? completeCategoryBonusText,
 }) =>
     CategoryStruct(
       id: id,
       name: name,
+      description: description,
       image: image,
       cardsCount: cardsCount,
       order: order,
@@ -343,4 +420,6 @@ CategoryStruct createCategoryStruct({
       resultBtnLink: resultBtnLink,
       unlockAchievementId: unlockAchievementId,
       requiredGameDays: requiredGameDays,
+      completeCategoryRewardCoins: completeCategoryRewardCoins,
+      completeCategoryBonusText: completeCategoryBonusText,
     );
